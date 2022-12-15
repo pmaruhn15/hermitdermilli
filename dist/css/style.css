@@ -35,7 +35,6 @@ header {
     margin: 0 1rem;
 }
 
-
 .btn-primary {
   align-items: center;
   background-color: #089289;
@@ -84,4 +83,12 @@ header {
   cursor: not-allowed;
   background: rgba(0, 0, 0, .08);
   color: rgba(0, 0, 0, .3);
+}
+
+/* FORMS */
+input {
+    border: none;
+    border-bottom: 1px solid #151515;
+    border-radius: 0.5rem 0.5rem 0 0;
+    background-color: #eeeeee;
 }
