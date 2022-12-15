@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Her mit der Milli</title>
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="auth">
+    <h1>Registrierung</h1>
+    <form class="signup">
+        <label for="email">Email:</label>
+        <input type="email" name="email" required>
+        <label for="password">Passwort:</label>
+        <input type="password" name="password" required>
+        <button>Registrieren</button>
+    </form>
+
+    <h1>Anmeldung</h1>
+    <form class="login">
+        <label for="email">Email:</label>
+        <input type="email" name="email" required>
+        <label for="password">Passwort:</label>
+        <input type="password" name="password" required>
+        <button>Anmelden</button>
+    </form>
+    </div>
+
+    <div class="content">
+    <button class="logout">Abmelden</button>
+    <h1>Abpumpen hinzufügen</h1>
+    <form class="add">
+        <label for="date">Datum:</label>
+        <input type="datetime-local" name="date" class="cal" required>
+        <label for="amount">Menge:</label>
+        <input type="number" name="amount" required>
+        <button>hinzufügen</button>
+    </form>
+
+    <!-- <button class="uploadbulk">bulk upload</button> -->
+
+    <h1>Stillen und Zufüttern hinzufügen</h1>
+    <form class="addFeed">
+        <label for="date">Datum:</label>
+        <input type="datetime-local" name="date" class="cal" required>
+        <label for="amountMm">Muttermilch:</label>
+        <input type="number" name="amountMm" value=0 required>
+        <label for="amountPre">PRE Milch:</label>
+        <input type="number" name="amountPre" value=0 required>
+        <button>hinzufügen</button>
+    </form>
+
+    <h1>Gewicht eintragen</h1>
+    <form class="addWeight">
+        <label for="date">Datum:</label>
+        <input type="datetime-local" name="date" class="cal" required>
+        <label for="weight">Gewicht:</label>
+        <input type="number" name="weight" required>
+        <button>hinzufügen</button>
+    </form>
+
+    <h1>Letztes Stillen</h1>
+    <div id="lastfed"></div>
+
+    <h1>Daten ändern</h1>
+    <form id="update" style="display: none;">
+        <label for="date">Datum:</label>
+        <input type="datetime" name="date" required>
+        <label for="amount">Menge:</label>
+        <input type="number" name="amount" required>
+        <button>updaten</button>
+    </form>
+    <form id="updateFeed" style="display: none;">
+        <label for="date">Datum:</label>
+        <input type="datetime" name="date" required>
+        <label for="amountMm">Muttermilch:</label>
+        <input type="number" name="amountMm" required>
+        <label for="amountPre">PRE Milch:</label>
+        <input type="number" name="amountPre" required>
+        <button>updaten</button>
+    </form>
+    <form id="updateWeight" style="display: none;">
+        <label for="date">Datum:</label>
+        <input type="datetime" name="date" required>
+        <label for="weight">Gewicht:</label>
+        <input type="number" name="weight" required>
+        <button>updaten</button>
+    </form>
+
+    <div style="width: 800px;"><canvas id="chart"></canvas></div>
+    <div style="width: 800px;"><canvas id="chart_pump_frequ"></canvas></div>
+
+    <h1>Historie</h1>
+    <table id="table"></table>
+
+    </div>
+
+    <script src="bundle.js"></script>
+</body>
+</html>
