@@ -169,8 +169,8 @@ function initCRUD(user) {
             mytable += (doc.data().amountPre === null) ? '<td></td>' : "<td>" + doc.data().amountPre + "</td>";
             mytable += (doc.data().amount === null) ? '<td></td>' : "<td>" + doc.data().amount + "</td>";
             mytable += (doc.data().weight === null) ? '<td></td>' : "<td>" + doc.data().weight + "</td>";
-            mytable += "<td><button class='update-button' data-id="+doc.id+">ändern</button></td>";
-            mytable += "<td><button class='delete-button' data-id="+doc.id+">entfernen</button></td>";
+            mytable += "<td><button class='update-button' data-id="+doc.id+">ändern<i class='fa-solid fa-pen'></i></button></td>";
+            mytable += "<td><button class='delete-button' data-id="+doc.id+">entfernen<i class='fa-solid fa-trash'></i></button></td>";
             mytable += "</tr>";
         })
         mytable += "</table>";
