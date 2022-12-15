@@ -8,14 +8,24 @@
 
 body {
     margin: 0;
+    background-color: #FEFFFE;
+    color: #210124;
 }
 
 h1,h2,h3,h4,h5,h6 {
     font-family: 'Nunito', Arial, Helvetica, sans-serif;
 }
 
+h2 {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 200;
+    font-size: 1rem;
+    margin-top: 5rem;
+}
+
 header {
-    background-color: #FFE9D2;
+    background-color: #E5FCF5;
     padding: 1rem;
     display: flex;
     flex-direction: row;
@@ -27,7 +37,7 @@ header {
     display: flex;
     flex-direction: row;
     align-items: center;
-    color: #089289;
+    color: #210124;
 }
 
 #logo > i {
@@ -35,27 +45,31 @@ header {
     margin: 0 1rem;
 }
 
+#logo > h1 {
+    font-size: 1.5rem;
+}
+
+#timeSinceLastFed {
+    font-weight: bold;
+}
+
+button {
+    font-family: 'Nunito', Arial, Helvetica, sans-serif;
+}
+
 .btn-primary {
   align-items: center;
-  background-color: #089289;
+  background-color: #B3DEC1;
   border: 0;
   border-radius: 100px;
   box-sizing: border-box;
-  color: #ffffff;
+  color: #210124;
   cursor: pointer;
   display: inline-flex;
-  font-family: -apple-system, system-ui, system-ui, "Segoe UI", Roboto, "Helvetica Neue", "Fira Sans", Ubuntu, Oxygen, "Oxygen Sans", Cantarell, "Droid Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Lucida Grande", Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  font-weight: 600;
   justify-content: center;
   line-height: 20px;
-  max-width: 480px;
-  min-height: 40px;
-  min-width: 0px;
   overflow: hidden;
-  padding: 0px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 10px 20px;
   text-align: center;
   touch-action: manipulation;
   transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
@@ -70,7 +84,7 @@ header {
 
 .btn-primary:hover,
 .btn-primary:focus { 
-  background-color: #16437E;
+  background-color: #729f81;
   color: #ffffff;
 }
 
@@ -85,10 +99,50 @@ header {
   color: rgba(0, 0, 0, .3);
 }
 
+.btn-edit {
+    color: #210124;
+    background-color: #FEFFFE;
+    border: 1px solid #210124;
+}
+
+.btn-danger {
+    color: #E55934;
+    background-color: #FEFFFE;
+    border: 1px solid #E55934;
+}
+
+.content {
+    max-width: 960px;
+    margin: 0 2rem;
+}
+
 /* FORMS */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
 input {
     border: none;
-    border-bottom: 1px solid #151515;
     border-radius: 0.5rem 0.5rem 0 0;
     background-color: #eeeeee;
+    width: 100%;
+    padding: 1rem;
+    font-family: 'Nunito', Arial, Helvetica, sans-serif;
+    margin-bottom: 1rem;
+}
+
+/* TABLE */
+#historyTable {
+    font-size: small;
+}
+
+#historyTable th {
+    text-align: left;
+    margin-right: 2rem;
+    font-family: 'Nunito', Arial, Helvetica, sans-serif;
+}
+
+#historyTable td:nth-child(1){
+    min-width: 100px;
 }

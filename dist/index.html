@@ -38,7 +38,13 @@
     </header>
 
     <div class="content">
-    <h1>Abpumpen hinzufügen</h1>
+
+        <div id="infodiv">
+            <p>Das letzte mal wurde der kleine Racker vor <span id="timeSinceLastFed"></span> gefüttert.</p>        
+            <!-- <span id="lastFed"></span> -->
+        </div>
+
+    <h2>Abpumpen hinzufügen</h2>
     <form class="add">
         <div>
             <label for="date">Datum:</label>
@@ -48,12 +54,12 @@
             <label for="amount">Menge:</label>
             <input type="number" name="amount" required>
         </div>
-        <button>hinzufügen</button>
+        <button class="btn-primary">Abpumpen hinzufügen</button>
     </form>
 
     <!-- <button class="uploadbulk">bulk upload</button> -->
 
-    <h1>Stillen und Zufüttern hinzufügen</h1>
+    <h2>Stillen und Zufüttern hinzufügen</h2>
     <form class="addFeed">
         <div>
             <label for="date">Datum:</label>
@@ -67,10 +73,10 @@
             <label for="amountPre">PRE Milch:</label>
             <input type="number" name="amountPre" value=0 required>
         </div>
-        <button>hinzufügen</button>
+        <button class="btn-primary">Füttern hinzufügen</button>
     </form>
 
-    <h1>Gewicht eintragen</h1>
+    <h2>Gewicht eintragen</h2>
     <form class="addWeight">
         <div>
             <label for="date">Datum:</label>    
@@ -80,13 +86,10 @@
             <label for="weight">Gewicht:</label>
             <input type="number" name="weight" required>
         </div>
-        <button>hinzufügen</button>
+        <button class="btn-primary">Gewicht eintragen</button>
     </form>
 
-    <h1>Letztes Stillen</h1>
-    <div id="lastfed"></div>
-
-    <h1>Daten ändern</h1>
+    <h2>Daten ändern</h2>
     <form id="update" style="display: none;">
         <label for="date">Datum:</label>
         <input type="datetime" name="date" required>
@@ -114,8 +117,8 @@
     <div style="width: 800px;"><canvas id="chart"></canvas></div>
     <div style="width: 800px;"><canvas id="chart_pump_frequ"></canvas></div>
 
-    <h1>Historie</h1>
-    <table id="table"></table>
+    <h2>Historie</h2>
+    <table id="historyTable"></table>
 
     </div>
 

@@ -74,7 +74,8 @@ function initCRUD(user) {
         snapshot.docs.forEach((doc) => {
             let lastfedtime = new Date(doc.data().date.seconds*1000)
             let elapsedtime = new Date() - lastfedtime - 3600000
-            document.getElementById("lastfed").innerHTML = "letztes Stillen: " + lastfedtime.toLocaleString() + " --- Zeit vergangen: " + new Date(elapsedtime).toLocaleTimeString()
+            //document.getElementById("lastFed").innerHTML = lastfedtime.toLocaleString()
+            document.getElementById("timeSinceLastFed").innerHTML = new Date(elapsedtime).toLocaleTimeString()
         })
     })
 
@@ -159,22 +160,22 @@ function initCRUD(user) {
     //real time collection data
     onSnapshot(q, (snapshot) => {
         var mytable = "<table>";
-        mytable += "<tr><td>Uhrzeit</td><td>Datum</td><td>Aktion</td><td>Muttermilch</td><td>PreMilch</td><td>Pumpen</td><td>Gewicht</td></tr>";
+        mytable += "<tr><th>Datum, Uhrzeit</th><th>Aktion</th><th>Muttermilch</th><th>PreMilch</th><th>Pumpen</th><th>Gewicht</th><th>Ändern</th><th>Entfernen</th></tr>";
         snapshot.docs.forEach((doc) => {
             mytable += "<tr>";
-            mytable += "<td>" +new Date(doc.data().date.seconds*1000).toLocaleTimeString('de-de')  + "</td>";
-            mytable += "<td>" +new Date(doc.data().date.seconds*1000).toLocaleDateString('de-de', { weekday:"long", year:"numeric", month:"short", day:"numeric"})  + "</td>";
+            mytable += "<td>" +new Date(doc.data().date.seconds*1000).toLocaleDateString('de-de', { weekday:"short", month:"short", day:"numeric"}) + new Date(doc.data().date.seconds*1000).toLocaleTimeString('de-de', {hour: '2-digit', minute:'2-digit'}) + "</td>";
+            // mytable += "<td>" +new Date(doc.data().date.seconds*1000).toLocaleTimeString('de-de', {hour: '2-digit', minute:'2-digit'})  + "</td>";
             mytable += "<td>" + doc.data().action + "</td>";
             mytable += (doc.data().amountMm === null) ? '<td></td>' : "<td>" + doc.data().amountMm + "</td>";
             mytable += (doc.data().amountPre === null) ? '<td></td>' : "<td>" + doc.data().amountPre + "</td>";
             mytable += (doc.data().amount === null) ? '<td></td>' : "<td>" + doc.data().amount + "</td>";
             mytable += (doc.data().weight === null) ? '<td></td>' : "<td>" + doc.data().weight + "</td>";
-            mytable += "<td><button class='update-button' data-id="+doc.id+">ändern<i class='fa-solid fa-pen'></i></button></td>";
-            mytable += "<td><button class='delete-button' data-id="+doc.id+">entfernen<i class='fa-solid fa-trash'></i></button></td>";
+            mytable += "<td><button class='update-button btn-primary btn-edit' data-id="+doc.id+"><i style='margin:0' class='fa-solid fa-pen'></i></button></td>";
+            mytable += "<td><button class='delete-button btn-primary btn-danger' data-id="+doc.id+"><i style='margin:0' class='fa-solid fa-trash'></i></button></td>";
             mytable += "</tr>";
         })
         mytable += "</table>";
-        document.getElementById("table").innerHTML = mytable;
+        document.getElementById("historyTable").innerHTML = mytable;
         
         // add update function to delete buttons
         var btns = document.getElementsByClassName("update-button");
