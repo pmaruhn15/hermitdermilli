@@ -26,10 +26,9 @@ import { enableIndexedDbPersistence } from "firebase/firestore";
 
 import Chart from "chart.js/auto";
 import "chartjs-adapter-date-fns";
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import ChartDataLabels from "chartjs-plugin-datalabels";
 // Register the plugin to all charts:
 Chart.register(ChartDataLabels);
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyDArEFma0YPjyU8swmi-0oSERYE3EAJAhY",
@@ -89,16 +88,23 @@ function initCRUD(user) {
     limit(1)
   );
 
-  onSnapshot(lastfed, (snapshot) => {
-    snapshot.docs.forEach((doc) => {
-      let lastfedtime = new Date(doc.data().date.seconds * 1000);
-      let elapsedtime = new Date() - lastfedtime - 3600000;
-      //document.getElementById("lastFed").innerHTML = lastfedtime.toLocaleString()
-      document.getElementById("timeSinceLastFed").innerHTML = new Date(
-        elapsedtime
-      ).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  function displayLastFedTime(lastfed) {
+    onSnapshot(lastfed, (snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        let lastfedtime = new Date(doc.data().date.seconds * 1000);
+        let elapsedtime = new Date() - lastfedtime - 3600000;
+        document.getElementById("timeSinceLastFed").innerHTML = new Date(
+          elapsedtime
+        ).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      });
     });
-  });
+  }
+
+  displayLastFedTime(lastfed);
+  setTimeout(function(){
+    displayLastFedTime(lastfed);
+  }, 60000);
+  
 
   //charts
   onSnapshot(i, (snapshot) => {
@@ -112,10 +118,17 @@ function initCRUD(user) {
     });
     console.log(data);
 
+    //aggregate data by days
     var result = [];
     data.reduce(function (res, value) {
       if (!res[value.day]) {
-        res[value.day] = { day: value.day, amount: 0 , amountMm: 0, amountPre: 0, weight:0};
+        res[value.day] = {
+          day: value.day,
+          amount: 0,
+          amountMm: 0,
+          amountPre: 0,
+          weight: 0,
+        };
         result.push(res[value.day]);
       }
       res[value.day].amount += value.amount;
@@ -125,6 +138,66 @@ function initCRUD(user) {
       return res;
     }, {});
 
+    //delete dates with no weight data
+    for (var day in result) {
+      if (result[day].weight == 0) {
+        delete result[day].weight;
+      }
+    }
+
+    //create chart object
+    const ctx_weight = document.getElementById("weightchart").getContext("2d");
+    let chartStatus_weigth = Chart.getChart("weightchart");
+    if (chartStatus_weigth != undefined) {
+      chartStatus_weigth.destroy();
+    }
+    new Chart(ctx_weight, {
+      type: "line",
+      data: {
+        labels: result.map((row) =>
+          new Date(row.day).toLocaleDateString(undefined, {
+            month: "numeric",
+            day: "numeric",
+          })
+        ),
+        datasets: [
+          {
+            label: "Gewicht",
+            data: result.map((row) => row.weight),
+            borderColor: "#E55934",
+            backgroundColor: "#E55934",
+          },
+        ],
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: false,
+            text: "Gewicht",
+          },
+          datalabels: {
+            color: "#210124",
+            anchor: "top",
+            align: "end",
+            offset: 0,
+            font: {
+              size: 8,
+            },
+          },
+        },
+        responsive: true,
+        scales: {
+          x: {
+              ticks: {
+                  display: false
+              }
+          }
+      }
+      },
+    });
+
+    //create chart object
     const ctx = document.getElementById("chart").getContext("2d");
     let chartStatus = Chart.getChart("chart");
     if (chartStatus != undefined) {
@@ -133,7 +206,12 @@ function initCRUD(user) {
     new Chart(ctx, {
       type: "bar",
       data: {
-        labels: result.map((row) => new Date(row.day).toLocaleDateString(undefined, {month: "numeric", day: "numeric"})),
+        labels: result.map((row) =>
+          new Date(row.day).toLocaleDateString(undefined, {
+            month: "numeric",
+            day: "numeric",
+          })
+        ),
         datasets: [
           {
             label: "Mutter-Milch",
@@ -147,12 +225,6 @@ function initCRUD(user) {
             backgroundColor: "#B3DEC1",
             borderRadius: 2,
           },
-          {
-            label: "Gewicht",
-            data: result.map((row) => row.weight),
-            type: "line",
-            order: 0
-          },
         ],
       },
       options: {
@@ -160,17 +232,17 @@ function initCRUD(user) {
         plugins: {
           title: {
             display: false,
-            text: 'Zugefüttert'
+            text: "Zugefüttert",
           },
           datalabels: {
-            color: '#FEFFFE',
-            anchor: 'end',
-            align: 'start',
+            color: "#FEFFFE",
+            anchor: "end",
+            align: "start",
             offset: 0,
             font: {
-              size: 8 
-            }
-          }
+              size: 8,
+            },
+          },
         },
         responsive: true,
         scales: {
@@ -178,44 +250,11 @@ function initCRUD(user) {
             stacked: true,
           },
           y: {
-            stacked: true
+            stacked: true,
           },
-        }
-      }
+        },
+      },
     });
-
-    // var result2 = [];
-    // data.reduce(function (res, value) {
-    //   if (!res[value.day]) {
-    //     res[value.day] = { day: value.day, count: 0 };
-    //     result2.push(res[value.day]);
-    //   }
-    //   if (value.action == "Pumpen") {
-    //     res[value.day].count += 1;
-    //   }
-    //   return res;
-    // }, {});
-
-    // const ctx2 = document.getElementById('chart_pump_frequ').getContext('2d');
-    // let chartStatus2 = Chart.getChart("chart_pump_frequ");
-    // if (chartStatus2 != undefined) {
-    //     chartStatus2.destroy();
-    // }
-    // new Chart(
-    //     ctx2,
-    //     {
-    //       type: 'bar',
-    //       data: {
-    //         labels: result2.map(row =>row.day),
-    //         datasets: [
-    //           {
-    //             label: 'Gepumpt pro Tag',
-    //             data: result2.map(row => row.count)
-    //           }
-    //         ]
-    //       },
-    //     }
-    //   );
   });
 
   //real time collection data
@@ -283,7 +322,7 @@ function initCRUD(user) {
             updateForm.setAttribute("data-id", doc.id);
           }
           if (doc.data().action == "Stillen") {
-            console.log("still update button pressed")
+            console.log("still update button pressed");
             var updateForm = document.getElementById("updateFeed");
             updateForm.style.display = "block";
             updateForm.date.setAttribute(
@@ -512,3 +551,5 @@ window.addEventListener("load", () => {
     cals[i].value = now.toISOString().slice(0, -1);
   }
 });
+
+
