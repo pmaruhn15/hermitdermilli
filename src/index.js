@@ -29,6 +29,8 @@ import "chartjs-adapter-date-fns";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 // Register the plugin to all charts:
 Chart.register(ChartDataLabels);
+Chart.defaults.font.family = 'Nunito';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyDArEFma0YPjyU8swmi-0oSERYE3EAJAhY",
@@ -234,6 +236,14 @@ function initCRUD(user) {
             display: false,
             text: "Zugefüttert",
           },
+          legend: {
+            labels: {
+                // This more specific font property overrides the global property
+                // font: {
+                //     family: 'Nunito'
+                // }
+            }
+        },
           datalabels: {
             color: "#FEFFFE",
             anchor: "end",
