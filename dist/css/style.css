@@ -105,15 +105,28 @@ button {
     border: 1px solid #210124;
 }
 
+.btn-edit:hover {
+    color: #FEFFFE;
+    background-color: #210124;
+    border: 1px solid #210124;
+}
+
 .btn-danger {
     color: #E55934;
     background-color: #FEFFFE;
     border: 1px solid #E55934;
 }
 
+.btn-danger:hover {
+    color: #FEFFFE;
+    background-color: #E55934;
+    border: 1px solid #E55934;
+}
+
 .content {
     max-width: 960px;
-    margin: 0 2rem;
+    margin: 0 auto;
+    padding: 0 3rem;
 }
 
 /* FORMS */
@@ -125,7 +138,7 @@ form {
 input {
     border: none;
     border-radius: 0.5rem 0.5rem 0 0;
-    background-color: #eeeeee;
+    background-color: #E5FCF5;
     width: 100%;
     padding: 1rem;
     font-family: 'Nunito', Arial, Helvetica, sans-serif;
@@ -134,13 +147,45 @@ input {
 
 /* TABLE */
 #historyTable {
+    border-collapse: collapse;
     font-size: small;
+    min-width: 400px;
+    margin-bottom: 3rem;
 }
 
 #historyTable th {
     text-align: left;
     margin-right: 2rem;
     font-family: 'Nunito', Arial, Helvetica, sans-serif;
+    color: #210124;
+    padding: 1rem!important;
+    border-top: 2px solid #B3DEC1;
+    border-bottom: 2px solid #B3DEC1;
+}
+
+#historyTable tr {    
+    border-bottom: 0.5px solid #09223b54;
+}
+
+#historyTable th,td {
+    padding: 0.5rem 1rem;
+}
+
+#historyTable tr:nth-child(1) {
+    color: #210124;
+    text-align: left;
+}
+
+#historyTable tr:last-child {
+    border-bottom: 2px solid #B3DEC1;
+}
+
+#historyTable th:nth-child(1){
+    border-radius: 1rem 0 0 0;
+}
+
+#historyTable th:last-child{
+    border-radius: 0 1rem 0 0;
 }
 
 #historyTable td:nth-child(1){
