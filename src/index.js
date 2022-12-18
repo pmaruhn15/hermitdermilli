@@ -118,7 +118,7 @@ function initCRUD(user) {
         day: new Date(doc.data().date.seconds * 1000).toDateString(),
       });
     });
-    console.log(data);
+    // console.log(data);
 
     //aggregate data by days
     var result = [];
@@ -130,6 +130,8 @@ function initCRUD(user) {
           amountMm: 0,
           amountPre: 0,
           weight: 0,
+          countPump: 0, 
+          countNurs: 0,
         };
         result.push(res[value.day]);
       }
@@ -137,10 +139,19 @@ function initCRUD(user) {
       res[value.day].amountMm += value.amountMm;
       res[value.day].amountPre += value.amountPre;
       res[value.day].weight += value.weight;
+
+      //counts
+      if (value.action == "Pumpen") {
+        res[value.day].countPump += 1;
+      }
+      if (value.action == "Stillen") {
+        res[value.day].countNurs += 1;
+      }
+      
       return res;
     }, {});
 
-    //delete dates with no weight data
+    //delete entries with no weight data
     for (var day in result) {
       if (result[day].weight == 0) {
         delete result[day].weight;
@@ -216,13 +227,13 @@ function initCRUD(user) {
         ),
         datasets: [
           {
-            label: "Mutter-Milch",
+            label: "Abgepumpte Mutter-Milch zugefüttert",
             data: result.map((row) => row.amountMm),
             backgroundColor: "#210124",
             borderRadius: 2,
           },
           {
-            label: "Pre-Milch",
+            label: "Pre-Milch zugefüttert",
             data: result.map((row) => row.amountPre),
             backgroundColor: "#B3DEC1",
             borderRadius: 2,
@@ -246,6 +257,189 @@ function initCRUD(user) {
         },
           datalabels: {
             color: "#FEFFFE",
+            anchor: "end",
+            align: "start",
+            offset: 0,
+            font: {
+              size: 8,
+            },
+          },
+        },
+        responsive: true,
+        scales: {
+          x: {
+            stacked: true,
+          },
+          y: {
+            stacked: true,
+          },
+        },
+      },
+    });
+
+    //create chart object
+    const ctxFreq = document.getElementById("chartFrequ").getContext("2d");
+    let chartStatusFreq = Chart.getChart("chartFrequ");
+    if (chartStatusFreq != undefined) {
+      chartStatusFreq.destroy();
+    }
+    new Chart(ctxFreq, {
+      type: "bar",
+      data: {
+        labels: result.map((row) =>
+          new Date(row.day).toLocaleDateString(undefined, {
+            month: "numeric",
+            day: "numeric",
+          })
+        ),
+        datasets: [
+          {
+            label: "Wie oft pro Tag wurde gepumpt",
+            data: result.map((row) => row.countPump),
+            backgroundColor: "#000000",
+            borderRadius: 2,
+          },
+        ],
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: false,
+            text: "Zugefüttert",
+          },
+          legend: {
+            labels: {
+                // This more specific font property overrides the global property
+                // font: {
+                //     family: 'Nunito'
+                // }
+            }
+        },
+          datalabels: {
+            color: "#FFFFFF",
+            anchor: "end",
+            align: "start",
+            offset: 0,
+            font: {
+              size: 8,
+            },
+          },
+        },
+        responsive: true,
+        scales: {
+          x: {
+            stacked: true,
+          },
+          y: {
+            stacked: true,
+          },
+        },
+      },
+    });
+
+    //create chart object
+    const ctxFreqNurs = document.getElementById("chartFrequNurs").getContext("2d");
+    let chartStatusFreqNurs = Chart.getChart("chartFrequNurs");
+    if (chartStatusFreqNurs != undefined) {
+      chartStatusFreqNurs.destroy();
+    }
+    new Chart(ctxFreqNurs, {
+      type: "bar",
+      data: {
+        labels: result.map((row) =>
+          new Date(row.day).toLocaleDateString(undefined, {
+            month: "numeric",
+            day: "numeric",
+          })
+        ),
+        datasets: [
+          {
+            label: "Wie oft pro Tag wurde gestillt (Stillen mit Zufütter inklusive)",
+            data: result.map((row) => row.countNurs),
+            backgroundColor: "#000000",
+            borderRadius: 2,
+          },
+        ],
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: false,
+            text: "Zugefüttert",
+          },
+          legend: {
+            labels: {
+                // This more specific font property overrides the global property
+                // font: {
+                //     family: 'Nunito'
+                // }
+            }
+        },
+          datalabels: {
+            color: "#FFFFFF",
+            anchor: "end",
+            align: "start",
+            offset: 0,
+            font: {
+              size: 8,
+            },
+          },
+        },
+        responsive: true,
+        scales: {
+          x: {
+            stacked: true,
+          },
+          y: {
+            stacked: true,
+          },
+        },
+      },
+    });
+
+    //create chart object
+    const ctxAmountPump = document.getElementById("chartAmountPerPump").getContext("2d");
+    let chartStatusAmountPump = Chart.getChart("chartAmountPerPump");
+    if (chartStatusAmountPump != undefined) {
+      chartStatusAmountPump.destroy();
+    }
+    new Chart(ctxAmountPump, {
+      type: "bar",
+      data: {
+        labels: result.map((row) =>
+          new Date(row.day).toLocaleDateString(undefined, {
+            month: "numeric",
+            day: "numeric",
+          })
+        ),
+        datasets: [
+          {
+            label: "Wie viel Muttermilch wurde am Tag durchschnittlich pro Pumpen gewonnen",
+            data: result.map((row) => (row.amountMm/row.countPump).toFixed(2)),
+            backgroundColor: "#000000",
+            borderRadius: 2,
+          },
+        ],
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: false,
+            text: "Zugefüttert",
+          },
+          legend: {
+            labels: {
+                // This more specific font property overrides the global property
+                // font: {
+                //     family: 'Nunito'
+                // }
+            }
+        },
+          datalabels: {
+            color: "#FFFFFF",
             anchor: "end",
             align: "start",
             offset: 0,
@@ -319,25 +513,25 @@ function initCRUD(user) {
     for (let i = 0; i < btns.length; i++) {
       btns[i].addEventListener("click", function (btn) {
         //get document
-        const docRef = doc(colRef, btn.originalTarget.dataset.id);
+        console.log(btns[i].dataset.id)
+        const docRef = doc(colRef, btns[i].dataset.id);
         getDoc(docRef).then((doc) => {
           if (doc.data().action == "Pumpen") {
             var updateForm = document.getElementById("update");
             updateForm.style.display = "block";
             updateForm.date.setAttribute(
               "value",
-              new Date(doc.data().date.seconds * 1000)
+              formatDate(new Date(doc.data().date.seconds * 1000)).toISOString().slice(0, -1),
             );
             updateForm.amount.setAttribute("value", doc.data().amount);
             updateForm.setAttribute("data-id", doc.id);
           }
           if (doc.data().action == "Stillen") {
-            console.log("still update button pressed");
             var updateForm = document.getElementById("updateFeed");
             updateForm.style.display = "block";
             updateForm.date.setAttribute(
               "value",
-              new Date(doc.data().date.seconds * 1000)
+              formatDate(new Date(doc.data().date.seconds * 1000)).toISOString().slice(0, -1),
             );
             updateForm.amountMm.setAttribute("value", doc.data().amountMm);
             updateForm.amountPre.setAttribute("value", doc.data().amountPre);
@@ -348,11 +542,14 @@ function initCRUD(user) {
             updateForm.style.display = "block";
             updateForm.date.setAttribute(
               "value",
-              new Date(doc.data().date.seconds * 1000)
+              formatDate(new Date(doc.data().date.seconds * 1000)).toISOString().slice(0, -1),
             );
             updateForm.weight.setAttribute("value", doc.data().weight);
             updateForm.setAttribute("data-id", doc.id);
           }
+
+          //Show Modal
+          document.getElementById("updateModal").style.display = "block"
         });
       });
     }
@@ -369,7 +566,6 @@ function initCRUD(user) {
 
   //adding documents Pumpen
   const addPumpForm = document.querySelector(".add");
-  // addPumpForm[0].setAttribute("value", new Date()); //set current time in input form
   addPumpForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -381,14 +577,13 @@ function initCRUD(user) {
       weight: null,
       action: "Pumpen",
     }).then(() => {
-      addPumpForm.reset();
-      addPumpForm[0].setAttribute("value", new Date()); //set current time in input form
+      addPumpForm.reset()
+      updateDateFields()
     });
   });
 
   //adding documents Stillen
   const addFeedForm = document.querySelector(".addFeed");
-  addFeedForm[0].setAttribute("value", new Date()); //set current time in input form
   addFeedForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -401,13 +596,12 @@ function initCRUD(user) {
       action: "Stillen",
     }).then(() => {
       addFeedForm.reset();
-      addFeedForm[0].setAttribute("value", new Date()); //set current time in input form
+      updateDateFields()
     });
   });
 
   //adding documents Gewicht
   const addWeightForm = document.querySelector(".addWeight");
-  addWeightForm[0].setAttribute("value", new Date()); //set current time in input form
   addWeightForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -420,7 +614,7 @@ function initCRUD(user) {
       action: "Wiegen",
     }).then(() => {
       addWeightForm.reset();
-      addWeightForm[0].setAttribute("value", new Date()); //set current time in input form
+      updateDateFields()
     });
   });
 
@@ -428,7 +622,7 @@ function initCRUD(user) {
   const updateForm = document.querySelector("#update");
   updateForm.addEventListener("submit", (e) => {
     e.preventDefault();
-
+    console.log(updateForm.dataset.id)
     const docRef = doc(colRef, updateForm.dataset.id);
     updateDoc(docRef, {
       date: new Date(updateForm.date.value),
@@ -440,7 +634,7 @@ function initCRUD(user) {
   const updateFeedForm = document.querySelector("#updateFeed");
   updateFeedForm.addEventListener("submit", (e) => {
     e.preventDefault();
-
+    console.log(updateForm.dataset.id)
     const docRef = doc(colRef, updateFeedForm.dataset.id);
     updateDoc(docRef, {
       date: new Date(updateFeedForm.date.value),
@@ -452,7 +646,7 @@ function initCRUD(user) {
   });
   const updateWeightForm = document.querySelector("#updateWeight");
   updateWeightForm.addEventListener("submit", (e) => {
-    console.log();
+    console.log(updateForm.dataset.id)
     const docRef = doc(colRef, updateWeightForm.dataset.id);
     updateDoc(docRef, {
       date: new Date(updateWeightForm.date.value),
@@ -549,17 +743,50 @@ onAuthStateChanged(auth, (user) => {
 });
 
 window.addEventListener("load", () => {
-  var now = new Date();
-  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  updateDateFields()
+});
 
-  /* remove second/millisecond if needed - credit ref. https://stackoverflow.com/questions/24468518/html5-input-datetime-local-default-value-of-today-and-current-time#comment112871765_60884408 */
-  now.setMilliseconds(null);
-  now.setSeconds(null);
+function updateDateFields() {
+  var now = formatDate(new Date());
+  // now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
 
-  let cals = document.getElementsByClassName("cal");
+  // /* remove second/millisecond if needed - credit ref. https://stackoverflow.com/questions/24468518/html5-input-datetime-local-default-value-of-today-and-current-time#comment112871765_60884408 */
+  // now.setMilliseconds(null);
+  // now.setSeconds(null);  
+
+  let cals = document.getElementsByClassName("calnew");
   for (let i = 0; i < cals.length; i++) {
     cals[i].value = now.toISOString().slice(0, -1);
   }
-});
+}
 
+function formatDate(date) {
+  date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
 
+  /* remove second/millisecond if needed - credit ref. https://stackoverflow.com/questions/24468518/html5-input-datetime-local-default-value-of-today-and-current-time#comment112871765_60884408 */
+  date.setMilliseconds(null);
+  date.setSeconds(null);
+  return date
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  var modal = document.getElementById("updateModal");
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+
+  let updateForms = document.getElementsByClassName("updateForm");
+  for (let i = 0; i < updateForms.length; i++) {
+    updateForms[i].style.display = "none"
+  }
+}
+// When the user clicks on <span> (x), close the modal
+document.getElementsByClassName("close")[0].onclick = function() {
+  document.getElementById("updateModal").style.display = "none";
+
+  let updateForms = document.getElementsByClassName("updateForm");
+  for (let i = 0; i < updateForms.length; i++) {
+    updateForms[i].style.display = "none"
+  }
+}

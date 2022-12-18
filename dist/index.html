@@ -48,7 +48,7 @@
     <form class="add">
         <div>
             <label for="date">Datum:</label>
-            <input type="datetime-local" name="date" class="cal" required>
+            <input type="datetime-local" name="date" class="cal calnew" required>
         </div>
         <div>
             <label for="amount">Menge:</label>
@@ -63,7 +63,7 @@
     <form class="addFeed">
         <div>
             <label for="date">Datum:</label>
-            <input type="datetime-local" name="date" class="cal" required>
+            <input type="datetime-local" name="date" class="cal calnew" required>
         </div>
         <div>
             <label for="amountMm">Muttermilch:</label>
@@ -80,7 +80,7 @@
     <form class="addWeight">
         <div>
             <label for="date">Datum:</label>    
-            <input type="datetime-local" name="date" class="cal" required>
+            <input type="datetime-local" name="date" class="cal calnew" required>
         </div>
         <div>
             <label for="weight">Gewicht:</label>
@@ -89,33 +89,42 @@
         <button class="btn-primary">Gewicht eintragen</button>
     </form>
 
-    <h2>Daten ändern</h2>
-    <form id="update" style="display: none;">
-        <label for="date">Datum:</label>
-        <input type="datetime" name="date" required>
-        <label for="amount">Menge:</label>
-        <input type="number" name="amount" required>
-        <button>updaten</button>
-    </form>
-    <form id="updateFeed" style="display: none;">
-        <label for="date">Datum:</label>
-        <input type="datetime" name="date" required>
-        <label for="amountMm">Muttermilch:</label>
-        <input type="number" name="amountMm" required>
-        <label for="amountPre">PRE Milch:</label>
-        <input type="number" name="amountPre" required>
-        <button>updaten</button>
-    </form>
-    <form id="updateWeight" style="display: none;">
-        <label for="date">Datum:</label>
-        <input type="datetime" name="date" required>
-        <label for="weight">Gewicht:</label>
-        <input type="number" name="weight" required>
-        <button>updaten</button>
-    </form>
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Daten ändern</h2>
+            <form id="update" class="updateForm" style="display: none;">
+                <label for="date">Datum:</label>
+                <input type="datetime-local" name="date" class="cal" required>
+                <label for="amount">Menge:</label>
+                <input type="number" name="amount" required>
+                <button>updaten</button>
+            </form>
+            <form id="updateFeed" class="updateForm" style="display: none;">
+                <label for="date">Datum:</label>
+                <input type="datetime-local" name="date" class="cal" required>
+                <label for="amountMm">Muttermilch:</label>
+                <input type="number" name="amountMm" required>
+                <label for="amountPre">PRE Milch:</label>
+                <input type="number" name="amountPre" required>
+                <button>updaten</button>
+            </form>
+            <form id="updateWeight" class="updateForm" style="display: none;">
+                <label for="date">Datum:</label>
+                <input type="datetime-local" name="date" class="cal" required>
+                <label for="weight">Gewicht:</label>
+                <input type="number" name="weight" required>
+                <button>updaten</button>
+            </form>
+        </div>
+    </div>
 
     <div style="height: 200px;"><canvas id="weightchart"></canvas></div>
     <div style="height: 300px;"><canvas id="chart"></canvas></div>
+    <div style="height: 300px;"><canvas id="chartFrequ"></canvas></div>
+    <div style="height: 300px;"><canvas id="chartAmountPerPump"></canvas></div>
+    <div style="height: 300px;"><canvas id="chartFrequNurs"></canvas></div>
+    
 
     <h2>Historie</h2>
     <table id="historyTable"></table>
